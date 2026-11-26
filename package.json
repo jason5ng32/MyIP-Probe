@@ -1,0 +1,26 @@
+{
+  "name": "myip-probe",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A one-click \"what's my IP\" service for Cloudflare Workers: a page for people, plain text for curl, JSON for scripts and AI agents.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "types": "wrangler types",
+    "typecheck": "wrangler types && tsc --noEmit",
+    "test": "node --test 'tests/**/*.test.ts'",
+    "check": "pnpm typecheck && pnpm test"
+  },
+  "packageManager": "pnpm@12.18.0",
+  "devDependencies": {
+    "@tailwindcss/cli": "4.3.5",
+    "@types/node": "^26.6.7",
+    "tailwindcss": "4.3.5",
+    "typescript": "^7.0.2",
+    "wrangler": "^4.168.0"
+  }
+}

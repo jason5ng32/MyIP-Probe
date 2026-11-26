@@ -1,0 +1,294 @@
+{
+  "connections": {
+    "full_v4": {
+      "ip": "203.0.113.42",
+      "cf": {
+        "city": "Exampleton",
+        "region": "Example Province",
+        "regionCode": "EP",
+        "country": "NL",
+        "continent": "EU",
+        "isEUCountry": "1",
+        "postalCode": "1011",
+        "latitude": "52.37020",
+        "longitude": "4.89517",
+        "timezone": "Europe/Amsterdam",
+        "asn": 64500,
+        "asOrganization": "Example Networks B.V.",
+        "colo": "AMS",
+        "httpProtocol": "HTTP/2",
+        "tlsVersion": "TLSv1.3",
+        "tlsCipher": "AEAD-AES128-GCM-SHA256",
+        "clientTcpRtt": 12
+      }
+    },
+    "full_v6": {
+      "ip": "2001:db8:85a3::8a2e:370:7334",
+      "cf": {
+        "city": "Sampleville",
+        "region": "Sample Prefecture",
+        "regionCode": "13",
+        "country": "JP",
+        "continent": "AS",
+        "postalCode": "100-0001",
+        "latitude": "35.68950",
+        "longitude": "139.69171",
+        "timezone": "Asia/Tokyo",
+        "asn": 64501,
+        "asOrganization": "Sample Telecom",
+        "colo": "NRT",
+        "httpProtocol": "HTTP/3",
+        "tlsVersion": "TLSv1.3",
+        "tlsCipher": "AEAD-AES256-GCM-SHA384",
+        "clientTcpRtt": 0
+      }
+    },
+    "sparse": {
+      "ip": "198.51.100.7",
+      "cf": {
+        "country": "XX",
+        "colo": "SIN",
+        "httpProtocol": "HTTP/1.1"
+      }
+    },
+    "no_cf": {
+      "ip": "192.0.2.1"
+    }
+  },
+  "clients": {
+    "curl": {
+      "User-Agent": "curl/8.7.1",
+      "Accept": "*/*"
+    },
+    "fetch": {
+      "User-Agent": "Mozilla/5.0 (Example) Browser/1.0",
+      "Accept": "*/*"
+    },
+    "browser": {
+      "User-Agent": "Mozilla/5.0 (Example) Browser/1.0",
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+    }
+  },
+  "cases": [
+    {
+      "name": "full_v4 curl /",
+      "connection": "full_v4",
+      "client": "curl",
+      "path": "/",
+      "expected": {
+        "status": 200,
+        "contentType": "text/plain",
+        "body": "203.0.113.42\n"
+      }
+    },
+    {
+      "name": "full_v4 curl /geo",
+      "connection": "full_v4",
+      "client": "curl",
+      "path": "/geo",
+      "expected": {
+        "status": 200,
+        "contentType": "text/plain",
+        "body": "IP: 203.0.113.42\nCity: Exampleton\nRegion: Example Province\nCountry: NL\nFlag: 🇳🇱\nLatitude: 52.37020\nLongitude: 4.89517\nOrg: Example Networks B.V.\nTimezone: Europe/Amsterdam\nASN: AS64500\nNote: For more detailed IP information, visit https://ipcheck.ing\n"
+      }
+    },
+    {
+      "name": "full_v4 fetch /",
+      "connection": "full_v4",
+      "client": "fetch",
+      "path": "/",
+      "expected": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": "{\"ip\":\"203.0.113.42\"}"
+      }
+    },
+    {
+      "name": "full_v4 fetch /geo",
+      "connection": "full_v4",
+      "client": "fetch",
+      "path": "/geo",
+      "expected": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": "{\"ip\":\"203.0.113.42\",\"city\":\"Exampleton\",\"region\":\"Example Province\",\"country\":\"NL\",\"flag\":\"🇳🇱\",\"latitude\":\"52.37020\",\"longitude\":\"4.89517\",\"org\":\"Example Networks B.V.\",\"asn\":\"AS64500\",\"Timezone\":\"Europe/Amsterdam\",\"note\":\"For more detailed IP information, visit https://ipcheck.ing\"}"
+      }
+    },
+    {
+      "name": "full_v4 browser /geo",
+      "connection": "full_v4",
+      "client": "browser",
+      "path": "/geo",
+      "expected": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": "{\"ip\":\"203.0.113.42\",\"city\":\"Exampleton\",\"region\":\"Example Province\",\"country\":\"NL\",\"flag\":\"🇳🇱\",\"latitude\":\"52.37020\",\"longitude\":\"4.89517\",\"org\":\"Example Networks B.V.\",\"asn\":\"AS64500\",\"Timezone\":\"Europe/Amsterdam\",\"note\":\"For more detailed IP information, visit https://ipcheck.ing\"}"
+      }
+    },
+    {
+      "name": "full_v6 curl /",
+      "connection": "full_v6",
+      "client": "curl",
+      "path": "/",
+      "expected": {
+        "status": 200,
+        "contentType": "text/plain",
+        "body": "2001:db8:85a3::8a2e:370:7334\n"
+      }
+    },
+    {
+      "name": "full_v6 curl /geo",
+      "connection": "full_v6",
+      "client": "curl",
+      "path": "/geo",
+      "expected": {
+        "status": 200,
+        "contentType": "text/plain",
+        "body": "IP: 2001:db8:85a3::8a2e:370:7334\nCity: Sampleville\nRegion: Sample Prefecture\nCountry: JP\nFlag: 🇯🇵\nLatitude: 35.68950\nLongitude: 139.69171\nOrg: Sample Telecom\nTimezone: Asia/Tokyo\nASN: AS64501\nNote: For more detailed IP information, visit https://ipcheck.ing\n"
+      }
+    },
+    {
+      "name": "full_v6 fetch /",
+      "connection": "full_v6",
+      "client": "fetch",
+      "path": "/",
+      "expected": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": "{\"ip\":\"2001:db8:85a3::8a2e:370:7334\"}"
+      }
+    },
+    {
+      "name": "full_v6 fetch /geo",
+      "connection": "full_v6",
+      "client": "fetch",
+      "path": "/geo",
+      "expected": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": "{\"ip\":\"2001:db8:85a3::8a2e:370:7334\",\"city\":\"Sampleville\",\"region\":\"Sample Prefecture\",\"country\":\"JP\",\"flag\":\"🇯🇵\",\"latitude\":\"35.68950\",\"longitude\":\"139.69171\",\"org\":\"Sample Telecom\",\"asn\":\"AS64501\",\"Timezone\":\"Asia/Tokyo\",\"note\":\"For more detailed IP information, visit https://ipcheck.ing\"}"
+      }
+    },
+    {
+      "name": "full_v6 browser /geo",
+      "connection": "full_v6",
+      "client": "browser",
+      "path": "/geo",
+      "expected": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": "{\"ip\":\"2001:db8:85a3::8a2e:370:7334\",\"city\":\"Sampleville\",\"region\":\"Sample Prefecture\",\"country\":\"JP\",\"flag\":\"🇯🇵\",\"latitude\":\"35.68950\",\"longitude\":\"139.69171\",\"org\":\"Sample Telecom\",\"asn\":\"AS64501\",\"Timezone\":\"Asia/Tokyo\",\"note\":\"For more detailed IP information, visit https://ipcheck.ing\"}"
+      }
+    },
+    {
+      "name": "sparse curl /",
+      "connection": "sparse",
+      "client": "curl",
+      "path": "/",
+      "expected": {
+        "status": 200,
+        "contentType": "text/plain",
+        "body": "198.51.100.7\n"
+      }
+    },
+    {
+      "name": "sparse curl /geo",
+      "connection": "sparse",
+      "client": "curl",
+      "path": "/geo",
+      "expected": {
+        "status": 200,
+        "contentType": "text/plain",
+        "body": "IP: 198.51.100.7\nCity: undefined\nRegion: N/A\nCountry: XX\nFlag: 🇽🇽\nLatitude: undefined\nLongitude: undefined\nOrg: undefined\nTimezone: undefined\nASN: undefined\nNote: For more detailed IP information, visit https://ipcheck.ing\n"
+      }
+    },
+    {
+      "name": "sparse fetch /",
+      "connection": "sparse",
+      "client": "fetch",
+      "path": "/",
+      "expected": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": "{\"ip\":\"198.51.100.7\"}"
+      }
+    },
+    {
+      "name": "sparse fetch /geo",
+      "connection": "sparse",
+      "client": "fetch",
+      "path": "/geo",
+      "expected": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": "{\"ip\":\"198.51.100.7\",\"region\":\"N/A\",\"country\":\"XX\",\"flag\":\"🇽🇽\",\"note\":\"For more detailed IP information, visit https://ipcheck.ing\"}"
+      }
+    },
+    {
+      "name": "sparse browser /geo",
+      "connection": "sparse",
+      "client": "browser",
+      "path": "/geo",
+      "expected": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": "{\"ip\":\"198.51.100.7\",\"region\":\"N/A\",\"country\":\"XX\",\"flag\":\"🇽🇽\",\"note\":\"For more detailed IP information, visit https://ipcheck.ing\"}"
+      }
+    },
+    {
+      "name": "no_cf curl /",
+      "connection": "no_cf",
+      "client": "curl",
+      "path": "/",
+      "expected": {
+        "status": 200,
+        "contentType": "text/plain",
+        "body": "192.0.2.1\n"
+      }
+    },
+    {
+      "name": "no_cf curl /geo",
+      "connection": "no_cf",
+      "client": "curl",
+      "path": "/geo",
+      "expected": {
+        "status": 200,
+        "contentType": "text/plain",
+        "body": "IP: 192.0.2.1\nCity: undefined\nRegion: N/A\nCountry: undefined\nFlag: undefined\nLatitude: undefined\nLongitude: undefined\nOrg: undefined\nTimezone: undefined\nASN: undefined\nNote: For more detailed IP information, visit https://ipcheck.ing\n"
+      }
+    },
+    {
+      "name": "no_cf fetch /",
+      "connection": "no_cf",
+      "client": "fetch",
+      "path": "/",
+      "expected": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": "{\"ip\":\"192.0.2.1\"}"
+      }
+    },
+    {
+      "name": "no_cf fetch /geo",
+      "connection": "no_cf",
+      "client": "fetch",
+      "path": "/geo",
+      "expected": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": "{\"ip\":\"192.0.2.1\",\"region\":\"N/A\",\"note\":\"For more detailed IP information, visit https://ipcheck.ing\"}"
+      }
+    },
+    {
+      "name": "no_cf browser /geo",
+      "connection": "no_cf",
+      "client": "browser",
+      "path": "/geo",
+      "expected": {
+        "status": 200,
+        "contentType": "application/json",
+        "body": "{\"ip\":\"192.0.2.1\",\"region\":\"N/A\",\"note\":\"For more detailed IP information, visit https://ipcheck.ing\"}"
+      }
+    }
+  ]
+}

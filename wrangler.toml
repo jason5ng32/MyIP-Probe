@@ -1,0 +1,11 @@
+# MyIP-Probe Worker configuration, deployable as is by anyone. It carries no
+# routes, hostnames or account: set those in the Cloudflare dashboard or in
+# your fork (README, "Configuration"); `pnpm deploy:dev` takes them from .env.
+name = "myip-probe"
+main = "src/index.ts"
+compatibility_date = "2026-11-20"
+workers_dev = true
+
+# Variables set in the Cloudflare dashboard survive redeploys (including
+# Deploy to Cloudflare / Workers Builds); see README "Configuration".
+keep_vars = true
