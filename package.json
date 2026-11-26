@@ -14,7 +14,8 @@
     "types": "wrangler types",
     "typecheck": "wrangler types && tsc --noEmit",
     "test": "node --test 'tests/**/*.test.ts'",
-    "check": "pnpm build:css && pnpm typecheck && pnpm test"
+    "check": "pnpm build:css && pnpm typecheck && pnpm test",
+    "deploy:dev": "pnpm build:css && node scripts/deploy-dev.ts"
   },
   "packageManager": "pnpm@12.18.0",
   "devDependencies": {
