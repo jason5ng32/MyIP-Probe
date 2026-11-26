@@ -66,6 +66,7 @@ Each field's type and description are in `/openapi.json` and `/llms.txt` of any 
 2. Give it your own hostname (see [Your own hostname](#your-own-hostname)) — the deploy flow cannot add one for you.
 3. Optionally set variables (see [Configuration](#configuration)), e.g. `PROBE_SITE_NAME` for the page title.
 4. Optionally add IPv4-only and IPv6-only hostnames (see [below](#ipv4-only-and-ipv6-only-hostnames-optional)).
+5. Optionally add a rate limit (see [Protect it](#protect-it)).
 
 **From a clone:**
 
@@ -78,7 +79,9 @@ No build step is needed: Wrangler bundles the TypeScript sources, and the page's
 
 ### Your own hostname
 
-In the Cloudflare dashboard, open the Worker → **Settings** → **Domains & Routes** → **Add** → **Custom domain**, and enter e.g. `probe.example.com`. Cloudflare creates the DNS record and certificate.
+The domain must be on Cloudflare (its nameservers pointing at Cloudflare; the free plan is enough). In the Cloudflare dashboard, open the Worker → **Settings** → **Domains & Routes** → **Add** → **Custom domain**, and enter e.g. `probe.example.com`. Cloudflare creates the DNS record and certificate.
+
+The `workers.dev` address keeps working alongside it. To serve only your hostname, turn `workers.dev` off under **Domains & Routes** — and set `workers_dev = false` in your copy's `wrangler.toml`, or the next deploy from your repository turns it back on. Zone rules such as a rate limit never apply to `workers.dev`, so a public probe is better without it.
 
 ### IPv4-only and IPv6-only hostnames (optional)
 
@@ -90,6 +93,16 @@ A normal Cloudflare hostname answers over both IP versions, so `curl` gets which
 4. Set the variables `PROBE_HOST`, `PROBE_HOST_V4` and `PROBE_HOST_V6` (below), so the page can query both and the docs mention them.
 
 Keep these two hostnames directly under the zone (`probe-4.example.com`, not `probe-4.dev.example.com`): their HTTPS uses the zone's `*.example.com` certificate, which covers one level only.
+
+## Protect it
+
+Each request runs the Worker once. On the Workers free plan that is up to 100,000 requests a day; past that, requests fail until the next day, at no cost. On a paid plan the excess is billed, so a public probe deserves a limit:
+
+- **Rate limit.** In the zone, open **Security** → **Security rules** → **Rate limiting rules** (older dashboards: **Security** → **WAF**) and create one rule — the free plan includes one. Match on the hostname alone, e.g. `http.host eq "probe.example.com"`, with no condition on the request method. For example: more than 30 requests in 10 seconds from one IP → **Block** for 10 seconds. People and scripts that call it now and then never get near that; a loop does.
+- **No browser challenges on this hostname.** Its main users are `curl`, scripts and agents, which cannot pass a challenge. Keep **Bot Fight Mode**, **I'm Under Attack** mode and any rule with a *Managed Challenge* away from it; if the zone uses them, exclude this hostname, or `curl` gets a challenge page instead of an IP.
+- **Turn `workers.dev` off** (see [Your own hostname](#your-own-hostname)) so the rate limit cannot be bypassed.
+
+The Worker itself keeps no logs and stores nothing; by default only its own hostnames may call it from another site's page (see `PROBE_ALLOWED_ORIGINS` below).
 
 ## Configuration
 
@@ -110,6 +123,8 @@ All variables are optional. Set them in the Cloudflare dashboard (Worker → **S
 | `PROBE_LEGACY_NOTE` | a link to ipcheck.ing | `Self-hosted probe` | The `note` line of the legacy `/geo` answer |
 
 A variable with an invalid value makes every request answer 500 with the list of problems, so a typo shows up on the first request.
+
+Calls from `curl`, scripts and servers are never limited by origin. Only another website's page, calling the probe from a visitor's browser, needs `PROBE_ALLOWED_ORIGINS` or `PROBE_ALLOWED_ROOT_DOMAINS` to read the answer.
 
 The logo and author live in `src/page/logo.ts` and `src/page/page.ts`; edit them in your fork.
 
