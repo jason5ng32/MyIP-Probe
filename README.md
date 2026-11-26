@@ -58,7 +58,14 @@ Each field's type and description are in `/openapi.json` and `/llms.txt` of any 
 
 ## Deploy
 
-**One click:** the button above copies this repository to your GitHub account and deploys it to your Cloudflare account. It runs at `myip-probe.<your-subdomain>.workers.dev` straight away.
+**One click:** the button above copies this repository to your GitHub account and deploys it to your Cloudflare account. There is nothing to fill in: it runs at `myip-probe.<your-subdomain>.workers.dev` straight away, and every setting below is optional.
+
+**After deploying**, in the Cloudflare dashboard:
+
+1. Open `https://myip-probe.<your-subdomain>.workers.dev` to check it works.
+2. Give it your own hostname (see [Your own hostname](#your-own-hostname)) — the deploy flow cannot add one for you.
+3. Optionally set variables (see [Configuration](#configuration)), e.g. `PROBE_SITE_NAME` for the page title.
+4. Optionally add IPv4-only and IPv6-only hostnames (see [below](#ipv4-only-and-ipv6-only-hostnames-optional)).
 
 **From a clone:**
 
@@ -86,21 +93,21 @@ Keep these two hostnames directly under the zone (`probe-4.example.com`, not `pr
 
 ## Configuration
 
-Set variables in the Cloudflare dashboard (Worker → **Settings** → **Variables and Secrets**) or as `[vars]` in your fork's `wrangler.toml`. `keep_vars = true` in `wrangler.toml` keeps dashboard variables across redeploys. All are optional.
+All variables are optional. Set them in the Cloudflare dashboard (Worker → **Settings** → **Variables and Secrets** → **Add**, type *Text*), or as `[vars]` in your fork's `wrangler.toml`. `keep_vars = true` in `wrangler.toml` keeps dashboard variables across redeploys. [`.env.dev.example`](.env.dev.example) lists them all with comments.
 
-| Variable | Default | Effect |
-|---|---|---|
-| `PROBE_HOST` | — | The hostname serving the page, so the IPv4 / IPv6 hosts accept its lookups |
-| `PROBE_HOST_V4` | — | An IPv4-only hostname (see above) |
-| `PROBE_HOST_V6` | — | An IPv6-only hostname (see above) |
-| `PROBE_SITE_NAME` | `MyIP Probe` | Name in the page header and title |
-| `PROBE_PAGE` | `true` | `false` serves no page: `/` answers as an API only |
-| `PROBE_GA_ID` | — | A Google Analytics measurement id (`G-…`); without it the page loads no analytics |
-| `PROBE_PRIVACY_NOTE` | on without `PROBE_GA_ID` | `false` hides the page's "keeps no logs and runs no analytics" line — do so if you record requests in any way |
-| `PROBE_FULL_REPORT_URL` | `https://ipcheck.ing` | The footer's "full report" link, or `off` |
-| `PROBE_ALLOWED_ORIGINS` | — | Origins that may read the API from a browser, comma-separated, or `*` for any. The probe's own hostnames always may |
-| `PROBE_ALLOWED_ROOT_DOMAINS` | — | Domains whose https origins (and subdomains) may read the API, comma-separated |
-| `PROBE_LEGACY_NOTE` | a link to ipcheck.ing | The `note` line of the legacy `/geo` answer |
+| Variable | Default | Example | Effect |
+|---|---|---|---|
+| `PROBE_HOST` | — | `probe.example.com` | The hostname serving the page, so the IPv4 / IPv6 hosts accept its lookups. Needed only with `PROBE_HOST_V4` / `PROBE_HOST_V6` |
+| `PROBE_HOST_V4` | — | `probe-4.example.com` | An IPv4-only hostname (see above) |
+| `PROBE_HOST_V6` | — | `probe-6.example.com` | An IPv6-only hostname (see above) |
+| `PROBE_SITE_NAME` | `MyIP Probe` | `Acme IP` | Name in the page header and title |
+| `PROBE_PAGE` | `true` | `false` | `false` serves no page: `/` answers as an API only |
+| `PROBE_GA_ID` | — | `G-ABC123XYZ` | A Google Analytics measurement id; without it the page loads no analytics |
+| `PROBE_PRIVACY_NOTE` | on without `PROBE_GA_ID` | `false` | `false` hides the page's "keeps no logs and runs no analytics" line — do so if you record requests in any way |
+| `PROBE_FULL_REPORT_URL` | `https://ipcheck.ing` | `off` | The footer's "full report" link: an https URL, or `off` to hide it |
+| `PROBE_ALLOWED_ORIGINS` | — | `https://app.example.com,http://localhost:5173` | Origins that may read the API from a browser, comma-separated, or `*` for any. The probe's own hostnames always may |
+| `PROBE_ALLOWED_ROOT_DOMAINS` | — | `example.com` | Domains whose https origins (and subdomains) may read the API, comma-separated |
+| `PROBE_LEGACY_NOTE` | a link to ipcheck.ing | `Self-hosted probe` | The `note` line of the legacy `/geo` answer |
 
 A variable with an invalid value makes every request answer 500 with the list of problems, so a typo shows up on the first request.
 
