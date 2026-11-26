@@ -64,9 +64,13 @@ Each file's header comment states its purpose — read those for specifics.
 
 ## Configuration
 
-- `.env.example` is the template, committed; `.env` holds real values and is
-  never committed. Every new variable lands in `.env.example` in the same
-  change, with a comment saying what it does.
+- `.env.dev.example` is the template for the test deployment, committed;
+  `.env` holds real values and is never committed. Every new variable lands
+  in `.env.dev.example` in the same change, with a comment saying what it
+  does.
+- **No `.env.example` or `.dev.vars.example`** in the repository: the
+  Deploy to Cloudflare button prompts for every variable in those files, and
+  one-click deploys need none (`tests/deploy-button.test.ts`).
 - `wrangler.toml` stays deployable by a stranger: `workers_dev` only, no
   routes, no account ids, no hostnames, `keep_vars = true` so dashboard
   variables survive redeploys. A deployment's own values live in the

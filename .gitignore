@@ -6,10 +6,10 @@ node_modules/
 .dev.vars
 .dev.vars.*
 
-# Local environment (fill from .env.example)
+# Local environment (fill from .env.dev.example)
 .env
 .env.*
-!.env.example
+!.env.dev.example
 
 # Planning docs (kept local until decided otherwise)
 iterations/

@@ -139,7 +139,7 @@ pnpm dev          # wrangler dev; request.cf holds mock data locally
 pnpm check        # build the CSS, type-check, run the tests
 ```
 
-Requires Node 26 and pnpm. Real `request.cf` data only exists on Cloudflare, so a test deployment helps: copy `.env.example` to `.env`, fill it in and run `pnpm deploy:dev`. Contributor conventions are in [AGENTS.md](AGENTS.md).
+Requires Node 26 and pnpm. Real `request.cf` data only exists on Cloudflare, so a test deployment helps: copy `.env.dev.example` to `.env`, fill it in and run `pnpm deploy:dev`. Contributor conventions are in [AGENTS.md](AGENTS.md).
 
 ## Credits
 

@@ -12,7 +12,7 @@ const CONFIG_DIR = '.wrangler/dev-deploy';
 const CONFIG_PATH = `${CONFIG_DIR}/wrangler.json`;
 
 if (!existsSync('.env')) {
-    console.error('No .env file; copy .env.example to .env and fill it in.');
+    console.error('No .env file; copy .env.dev.example to .env and fill it in.');
     process.exit(1);
 }
 process.loadEnvFile('.env');
