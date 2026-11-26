@@ -1,0 +1,114 @@
+/* Tailwind v4 input for the page. `pnpm build:css` compiles it into
+   styles.generated.ts, which the Worker inlines; this file never ships.
+   Colours are the Catppuccin palette (MIT, https://catppuccin.com),
+   following the system: Mocha in dark mode; in light mode Latte's accents
+   on neutral surfaces and text (Latte's own are lavender-tinted, MyIP's
+   light greys instead). shadcn's token names map onto it, so ui.ts recipes
+   keep working; `ctp-*` exposes the accents. */
+
+@import 'tailwindcss' source(none);
+@source './';
+@source not './styles.generated.ts';
+
+/* Light: Catppuccin Latte accents, neutral surfaces and text */
+:root {
+  --ctp-pink: #ea76cb;
+  --ctp-mauve: #8839ef;
+  --ctp-peach: #fe640b;
+  --ctp-green: #40a02b;
+  --ctp-sapphire: #209fb5;
+  --ctp-blue: #1e66f5;
+  --ctp-text: #262626;
+  --ctp-subtext0: #666666;
+  --ctp-overlay2: #737373;
+  --ctp-overlay0: #a3a3a3;
+  --ctp-surface1: #d4d4d4;
+  --ctp-surface0: #e8e8e8;
+  --ctp-base: #ffffff;
+  --ctp-mantle: #f4f4f4;
+  --ctp-crust: #ebebeb;
+  --page-bg: var(--ctp-base);
+  color-scheme: light;
+}
+
+/* Catppuccin Mocha */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ctp-pink: #f5c2e7;
+    --ctp-mauve: #cba6f7;
+    --ctp-peach: #fab387;
+    --ctp-green: #a6e3a1;
+    --ctp-sapphire: #74c7ec;
+    --ctp-blue: #89b4fa;
+    --ctp-text: #cdd6f4;
+    --ctp-subtext0: #a6adc8;
+    --ctp-overlay2: #9399b2;
+    --ctp-overlay0: #6c7086;
+    --ctp-surface1: #45475a;
+    --ctp-surface0: #313244;
+    --ctp-base: #1e1e2e;
+    --ctp-mantle: #181825;
+    --ctp-crust: #11111b;
+    --page-bg: var(--ctp-base);
+    color-scheme: dark;
+  }
+}
+
+/* shadcn tokens, in Catppuccin terms */
+:root {
+  --background: var(--ctp-base);
+  --foreground: var(--ctp-text);
+  --card: var(--ctp-base);
+  --card-foreground: var(--ctp-text);
+  --secondary: var(--ctp-surface0);
+  --secondary-foreground: var(--ctp-text);
+  --muted: var(--ctp-surface0);
+  --muted-foreground: var(--ctp-subtext0);
+  --accent: var(--ctp-surface0);
+  --accent-foreground: var(--ctp-text);
+  --border: var(--ctp-surface0);
+  --input: var(--ctp-surface1);
+  --ring: var(--ctp-overlay0);
+  --success: var(--ctp-green);
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-page-bg: var(--page-bg);
+  --color-ctp-pink: var(--ctp-pink);
+  --color-ctp-mauve: var(--ctp-mauve);
+  --color-ctp-peach: var(--ctp-peach);
+  --color-ctp-green: var(--ctp-green);
+  --color-ctp-sapphire: var(--ctp-sapphire);
+  --color-ctp-blue: var(--ctp-blue);
+  --color-ctp-overlay2: var(--ctp-overlay2);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+@layer base {
+  /* Bare `border` utilities take the token colour, as shadcn expects. */
+  *, ::before, ::after {
+    border-color: var(--border);
+  }
+  body {
+    background: var(--page-bg);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+  }
+}

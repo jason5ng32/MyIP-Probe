@@ -10,10 +10,11 @@
   },
   "scripts": {
     "dev": "wrangler dev",
+    "build:css": "node scripts/build-css.ts",
     "types": "wrangler types",
     "typecheck": "wrangler types && tsc --noEmit",
     "test": "node --test 'tests/**/*.test.ts'",
-    "check": "pnpm typecheck && pnpm test"
+    "check": "pnpm build:css && pnpm typecheck && pnpm test"
   },
   "packageManager": "pnpm@12.18.0",
   "devDependencies": {
