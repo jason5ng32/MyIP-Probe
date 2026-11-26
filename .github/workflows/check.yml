@@ -1,0 +1,39 @@
+# Runs the full self-check on every push and pull request: builds the page's
+# CSS, type-checks and runs the tests, then fails if the committed CSS module
+# is out of date.
+name: Check
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        # Pins the pnpm version from package.json's `packageManager`.
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check
+        run: pnpm check
+
+      - name: Committed CSS is up to date
+        run: git diff --exit-code -- src/page/styles.generated.ts
